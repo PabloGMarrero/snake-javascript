@@ -1,6 +1,8 @@
 export default class Snake {
     constructor(scene){
         this.scene = scene;
+        this.lastMoveTime = 0;
+        this.moveInteval = 500;
         this.direction = Phaser.Math.Vector2.RIGHT;
         this.body = [];
         this.body.push(
@@ -15,8 +17,15 @@ export default class Snake {
     }
 
     update(time){
-        this.body[0].x += this.direction.x;
-        this.body[0].y += this.direction.y;
+        if (time >= this.lastMoveTime + this.moveInteval){
+            this.lastMoveTime = time;
+            this.move();
+        }
+    }
+
+    move(){
+        this.body[0].x += this.direction.x *20 ;
+        this.body[0].y += this.direction.y *20 ;
     }
 
     keydown(event){
