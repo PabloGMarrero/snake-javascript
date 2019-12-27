@@ -2,7 +2,7 @@ export default class Snake {
     constructor(scene){
         this.scene = scene;
         this.lastMoveTime = 0;
-        this.moveInteval = 400;
+        this.moveInteval = 100;
         this.tileSize = 20 ;
         this.direction = Phaser.Math.Vector2.RIGHT;
         this.body = [];
@@ -10,6 +10,21 @@ export default class Snake {
         this.body.push(
             this.scene.add.rectangle(this.scene.game.config.width / 2, this.scene.game.config.height / 2,
                  this.tileSize, this.tileSize, 0x00ff00).setOrigin(0)
+        );
+
+        this.body.push(
+            this.scene.add.rectangle(this.scene.game.config.width / 2, this.scene.game.config.height / 2,
+                 this.tileSize, this.tileSize, 0xffffff).setOrigin(0)
+        );
+
+        this.body.push(
+            this.scene.add.rectangle(this.scene.game.config.width / 2, this.scene.game.config.height / 2,
+                 this.tileSize, this.tileSize, 0xffffff).setOrigin(0)
+        );
+
+        this.body.push(
+            this.scene.add.rectangle(this.scene.game.config.width / 2, this.scene.game.config.height / 2,
+                 this.tileSize, this.tileSize, 0xffffff).setOrigin(0)
         );
 
         this.apple = this.scene.add.rectangle(0, 0, this.tileSize, this.tileSize, 0xff00000).setOrigin(0)
@@ -46,11 +61,26 @@ export default class Snake {
         this.body[0].x = xPosition;
         this.body[0].y = yPosition;
 
+        this.analizeSnakeDied()
+
+    }
+
+    analizeSnakeDied(){
         if (this.body[0].x < 0 || this.body[0].x >=this.scene.game.config.width || 
             this.body[0].y < 0 || this.body[0].y >=this.scene.game.config.height ){
-                this.scene.scene.restart();
-            }
+                this.restart();
+        }
+        
+        let tail = this.body.slice(1)
 
+        if(tail.some( s => s.x === this.body[0].x  &&  s.y === this.body[0].y)){
+            this.restart()
+        }
+
+    }
+
+    restart(){
+        this.scene.scene.restart();
     }
 
     randomPositionApple(){
@@ -60,7 +90,7 @@ export default class Snake {
 
     eatenTheApple(){
         this.body.push(
-            this.scene.add.rectangle(0, 0, this.tileSize, this.tileSize, 0x00ff00).setOrigin(0)
+            this.scene.add.rectangle(0, 0, this.tileSize, this.tileSize, 0xffffff).setOrigin(0)
         );
         this.randomPositionApple();
         this.moveInteval -= 10;
